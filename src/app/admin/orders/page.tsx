@@ -21,47 +21,81 @@ export default function AdminOrdersPage() {
       {orders.length === 0 ? (
         <p className="text-gray-500 text-center py-8">주문 내역이 없습니다.</p>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">주문번호</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">상품</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">주문자</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">연락처</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">수량</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">금액</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">상태</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">일시</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {orders.map((order) => {
-                  const statusInfo = statusLabels[order.status] || statusLabels.pending;
-                  return (
-                    <tr key={order.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-3 font-mono text-xs text-gray-500">
-                        {order.id.slice(0, 8).toUpperCase()}
-                      </td>
-                      <td className="px-4 py-3 text-gray-900 font-medium">{order.dealTitle}</td>
-                      <td className="px-4 py-3 text-gray-700">{order.customerName}</td>
-                      <td className="px-4 py-3 text-gray-700">{order.customerPhone}</td>
-                      <td className="px-4 py-3 text-gray-700">{order.quantity}</td>
-                      <td className="px-4 py-3 text-gray-900 font-medium">{formatPrice(order.totalPrice)}</td>
-                      <td className="px-4 py-3">
-                        <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${statusInfo.className}`}>
-                          {statusInfo.label}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-xs text-gray-500">{formatDate(order.createdAt)}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+        <>
+          {/* Mobile: Card layout */}
+          <div className="md:hidden space-y-3">
+            {orders.map((order) => {
+              const statusInfo = statusLabels[order.status] || statusLabels.pending;
+              return (
+                <div key={order.id} className="bg-white rounded-xl border border-gray-200 p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <span className="text-gray-900 font-medium text-sm">{order.dealTitle}</span>
+                    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${statusInfo.className}`}>
+                      {statusInfo.label}
+                    </span>
+                  </div>
+                  <div className="space-y-1 text-sm text-gray-600">
+                    <div className="flex justify-between">
+                      <span>{order.customerName}</span>
+                      <span>{order.customerPhone}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>{order.quantity}개</span>
+                      <span className="font-medium text-gray-900">{formatPrice(order.totalPrice)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-400 pt-1">
+                      <span className="font-mono">{order.id.slice(0, 8).toUpperCase()}</span>
+                      <span>{formatDate(order.createdAt)}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </div>
+
+          {/* Desktop: Table layout */}
+          <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">주문번호</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">상품</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">주문자</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">연락처</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">수량</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">금액</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">상태</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">일시</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {orders.map((order) => {
+                    const statusInfo = statusLabels[order.status] || statusLabels.pending;
+                    return (
+                      <tr key={order.id} className="hover:bg-gray-50">
+                        <td className="px-4 py-3 font-mono text-xs text-gray-500">
+                          {order.id.slice(0, 8).toUpperCase()}
+                        </td>
+                        <td className="px-4 py-3 text-gray-900 font-medium">{order.dealTitle}</td>
+                        <td className="px-4 py-3 text-gray-700">{order.customerName}</td>
+                        <td className="px-4 py-3 text-gray-700">{order.customerPhone}</td>
+                        <td className="px-4 py-3 text-gray-700">{order.quantity}</td>
+                        <td className="px-4 py-3 text-gray-900 font-medium">{formatPrice(order.totalPrice)}</td>
+                        <td className="px-4 py-3">
+                          <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${statusInfo.className}`}>
+                            {statusInfo.label}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-xs text-gray-500">{formatDate(order.createdAt)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

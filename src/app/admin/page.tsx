@@ -24,54 +24,84 @@ export default function AdminDealsPage() {
       {deals.length === 0 ? (
         <p className="text-gray-500 text-center py-8">등록된 공구가 없습니다.</p>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">상품명</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">가격</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">상태</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">주문</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">액션</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {deals.map((deal) => (
-                  <tr key={deal.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <Link href={`/deals/${deal.slug}`} className="text-gray-900 font-medium hover:text-orange-600">
-                        {deal.title}
-                      </Link>
-                      <p className="text-xs text-gray-400 mt-0.5">{deal.category}</p>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="text-gray-900">{formatPrice(deal.groupPrice)}</span>
-                      <span className="text-xs text-red-500 ml-1">-{deal.discountRate}%</span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <StatusBadge status={deal.status} />
-                    </td>
-                    <td className="px-4 py-3 text-gray-600">
-                      {deal.currentOrders}/{deal.maxQuantity}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <Link
-                          href={`/admin/deals/${deal.id}/edit`}
-                          className="text-xs text-blue-600 hover:underline"
-                        >
-                          수정
-                        </Link>
-                        <DeleteDealButton dealId={deal.id} dealTitle={deal.title} />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <>
+          {/* Mobile: Card layout */}
+          <div className="md:hidden space-y-3">
+            {deals.map((deal) => (
+              <div key={deal.id} className="bg-white rounded-xl border border-gray-200 p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <Link href={`/deals/${deal.slug}`} className="text-gray-900 font-medium hover:text-orange-600 text-sm flex-1">
+                    {deal.title}
+                  </Link>
+                  <StatusBadge status={deal.status} />
+                </div>
+                <div className="flex items-center gap-3 text-sm text-gray-600 mb-3">
+                  <span>{formatPrice(deal.groupPrice)} <span className="text-xs text-red-500">-{deal.discountRate}%</span></span>
+                  <span>{deal.currentOrders}/{deal.maxQuantity}명</span>
+                </div>
+                <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
+                  <Link
+                    href={`/admin/deals/${deal.id}/edit`}
+                    className="text-sm text-blue-600 font-medium px-3 py-1.5 rounded-lg hover:bg-blue-50"
+                  >
+                    수정
+                  </Link>
+                  <DeleteDealButton dealId={deal.id} dealTitle={deal.title} />
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
+
+          {/* Desktop: Table layout */}
+          <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">상품명</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">가격</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">상태</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">주문</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600">액션</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {deals.map((deal) => (
+                    <tr key={deal.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        <Link href={`/deals/${deal.slug}`} className="text-gray-900 font-medium hover:text-orange-600">
+                          {deal.title}
+                        </Link>
+                        <p className="text-xs text-gray-400 mt-0.5">{deal.category}</p>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-gray-900">{formatPrice(deal.groupPrice)}</span>
+                        <span className="text-xs text-red-500 ml-1">-{deal.discountRate}%</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <StatusBadge status={deal.status} />
+                      </td>
+                      <td className="px-4 py-3 text-gray-600">
+                        {deal.currentOrders}/{deal.maxQuantity}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <Link
+                            href={`/admin/deals/${deal.id}/edit`}
+                            className="text-xs text-blue-600 hover:underline"
+                          >
+                            수정
+                          </Link>
+                          <DeleteDealButton dealId={deal.id} dealTitle={deal.title} />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

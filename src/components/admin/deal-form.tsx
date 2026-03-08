@@ -61,6 +61,14 @@ export default function DealForm({ deal, mode }: DealFormProps) {
       setError('상품명, 원가, 공구가는 필수 항목입니다.');
       return;
     }
+    if (groupPrice >= originalPrice) {
+      setError('공구가는 원가보다 낮아야 합니다.');
+      return;
+    }
+    if (minQuantity > maxQuantity) {
+      setError('최소 수량이 최대 수량보다 클 수 없습니다.');
+      return;
+    }
 
     setLoading(true);
     try {
@@ -137,6 +145,7 @@ export default function DealForm({ deal, mode }: DealFormProps) {
           <label className="block text-sm font-medium text-gray-700 mb-1">원가 (원) *</label>
           <input
             type="number"
+            min="0"
             value={originalPrice || ''}
             onChange={(e) => setOriginalPrice(Number(e.target.value))}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
@@ -146,6 +155,7 @@ export default function DealForm({ deal, mode }: DealFormProps) {
           <label className="block text-sm font-medium text-gray-700 mb-1">공구가 (원) *</label>
           <input
             type="number"
+            min="0"
             value={groupPrice || ''}
             onChange={(e) => setGroupPrice(Number(e.target.value))}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
@@ -186,6 +196,7 @@ export default function DealForm({ deal, mode }: DealFormProps) {
           <input
             type="number"
             value={minQuantity}
+            min="1"
             onChange={(e) => setMinQuantity(Number(e.target.value))}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
           />
@@ -195,6 +206,7 @@ export default function DealForm({ deal, mode }: DealFormProps) {
           <input
             type="number"
             value={maxQuantity}
+            min="1"
             onChange={(e) => setMaxQuantity(Number(e.target.value))}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
           />

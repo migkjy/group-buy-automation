@@ -34,7 +34,7 @@ export default function OrderForm({ deal }: OrderFormProps) {
       setError('이름을 입력해주세요.');
       return;
     }
-    if (!/^01[0-9]-?\d{3,4}-?\d{4}$/.test(customerPhone.replace(/-/g, ''))) {
+    if (!/^01[0-9]-?\d{3,4}-?\d{4}$/.test(customerPhone.trim())) {
       setError('올바른 전화번호를 입력해주세요. (예: 010-1234-5678)');
       return;
     }
@@ -70,13 +70,21 @@ export default function OrderForm({ deal }: OrderFormProps) {
     }
   };
 
-  const isDisabled = deal.status !== 'active';
+  const remainingSlots = deal.maxQuantity - deal.currentOrders;
+  const isSoldOut = remainingSlots <= 0;
+  const isDisabled = deal.status !== 'active' || isSoldOut;
 
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
       <h2 className="text-lg font-bold text-gray-900">공구 참여하기</h2>
 
-      {isDisabled && (
+      {isSoldOut && deal.status === 'active' && (
+        <p className="text-sm text-orange-700 bg-orange-50 p-3 rounded-lg">
+          현재 모든 수량이 소진되었습니다.
+        </p>
+      )}
+
+      {deal.status !== 'active' && (
         <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">
           현재 참여할 수 없는 공구입니다.
         </p>
@@ -143,17 +151,19 @@ export default function OrderForm({ deal }: OrderFormProps) {
         <div className="flex items-center gap-3">
           <button
             type="button"
+            aria-label="수량 감소"
             onClick={() => setQuantity((q) => Math.max(deal.minQuantity, q - 1))}
             disabled={isDisabled || quantity <= deal.minQuantity}
             className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg text-lg font-medium hover:bg-gray-50 disabled:opacity-50"
           >
             -
           </button>
-          <span className="text-lg font-semibold w-12 text-center">{quantity}</span>
+          <span className="text-lg font-semibold w-12 text-center" aria-live="polite">{quantity}</span>
           <button
             type="button"
-            onClick={() => setQuantity((q) => Math.min(deal.maxQuantity - deal.currentOrders, q + 1))}
-            disabled={isDisabled || quantity >= deal.maxQuantity - deal.currentOrders}
+            aria-label="수량 증가"
+            onClick={() => setQuantity((q) => Math.min(Math.max(remainingSlots, 0), q + 1))}
+            disabled={isDisabled || quantity >= remainingSlots}
             className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg text-lg font-medium hover:bg-gray-50 disabled:opacity-50"
           >
             +

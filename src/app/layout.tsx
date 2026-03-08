@@ -42,16 +42,16 @@ export default function RootLayout({
             <Link href="/" className="text-xl font-bold text-orange-600">
               공구마켓
             </Link>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
               <Link
                 href="/deals"
-                className="text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors"
+                className="text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors px-3 py-2 rounded-lg hover:bg-gray-50"
               >
                 공구 목록
               </Link>
               <Link
                 href="/admin"
-                className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-xs text-gray-400 hover:text-gray-600 transition-colors px-3 py-2 rounded-lg hover:bg-gray-50"
               >
                 관리자
               </Link>

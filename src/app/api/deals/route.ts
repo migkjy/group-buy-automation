@@ -20,6 +20,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (groupPrice >= originalPrice) {
+      return NextResponse.json(
+        { error: '공구가는 원가보다 낮아야 합니다.' },
+        { status: 400 }
+      );
+    }
+
     const deal: Deal = {
       id: generateId(),
       slug: slugify(title) || `deal-${Date.now()}`,
