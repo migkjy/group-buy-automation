@@ -13,6 +13,12 @@ export default function AdminLayout({
           <h2 className="text-lg font-bold text-gray-900 mb-3 hidden md:block">관리자</h2>
           <nav className="flex md:flex-col gap-1 overflow-x-auto pb-2 md:pb-0">
             <Link
+              href="/admin/dashboard"
+              className="whitespace-nowrap px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100"
+            >
+              대시보드
+            </Link>
+            <Link
               href="/admin"
               className="whitespace-nowrap px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100"
             >
