@@ -42,3 +42,6 @@ next-env.d.ts
 
 # pipeline generated data
 /data/
+
+# sensitive knowledge files
+.claude/knowledge/api-keys.md
